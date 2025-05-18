@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h2 { color: #333; }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .message { margin-top: 20px; padding: 10px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h2>YouTube Video Downloader</h2>
+
+    {% if not step %}
+        <form method="POST">
+            <input type="text" name="url" placeholder="Paste YouTube URL here" required>
+            <button type="submit">Get Qualities</button>
+        </form>
+    {% elif step == 'select' %}
+        <form method="POST" action="/download">
+            <input type="hidden" name="url" value="{{ url }}">
+            <label for="resolution">Select video quality:</label>
+            <select name="resolution" id="resolution">
+                {% for res in resolutions %}
+                    <option value="{{ res }}">{{ res }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Download</button>
+        </form>
+    {% endif %}
+
+    {% if success %}
+        <div class="message success">
+            ✅ <strong>{{ title }}</strong> downloaded successfully!<br>
+            Saved as <strong>{{ filename }}</strong> in <code>{{ path }}</code>
+        </div>
+    {% elif error %}
+        <div class="message error">
+            ❌ Error: {{ error }}
+        </div>
+    {% endif %}
+</body>
+</html>
